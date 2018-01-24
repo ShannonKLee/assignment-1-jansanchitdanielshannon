@@ -28,63 +28,62 @@ if (!(apikey && username && password)) {
   process.exit(1);
 }
 
-function getCollection(callback) {
+function getCollection(userkey, callback) {
   request.post({
-    url: 'https://pastebin.com/api/api_login.php',
+    url: 'https://pastebin.com/api/api_post.php',
     form: {
       api_dev_key: apikey,
-      api_user_name: username,
-      api_user_password: password
+      api_user_key: userkey,
+      api_option: 'list'
     }
   }, function (error, response, body) {
     if (error) {
-      console.error('Invalid apikey, username, or password');
+      console.error('Unknown error');
       return;
     }
 
-    let userkey = body;
-    request.post({
-      url: 'https://pastebin.com/api/api_post.php',
-      form: {
-        api_dev_key: apikey,
-        api_user_key: userkey,
-        api_option: 'list'
-      }
-    }, function (error, response, body) {
+    xml2js.parseString(body, function (error, result) {
       if (error) {
-        console.error('Unknown error');
+        console.error('Cannot parse output as XML');
+        return;
+      } else if (!(typeof result === 'object' &&
+                   typeof result.paste === 'object')) {
+        console.error('User has no pastes');
         return;
       }
 
-      xml2js.parseString(body, function (error, result) {
-        if (error) {
-          console.error('Cannot parse output as XML');
-          return;
-        }
-
-        if (!(typeof result === 'object' &&
-              typeof result.paste === 'object')) {
-          console.error('User has no pastes');
-          return;
-        }
-
-        callback(Array.isArray(result.paste) ? result.paste : [result.paste]);
-      });
+      callback(Array.isArray(result.paste) ? result.paste : [result.paste]);
     });
   });
 }
 
-function getSortedCollection(callback) {
+function getSortedCollection(userkey, callback) {
   // implement
-  getCollection(callback);
+  getCollection(userkey, callback);
 }
 
-// use the following to test your functions
-getCollection(function(array){
-  console.log("Total items in collection ",array.length)
-  console.log("First item in collection ",array[0])
-})
+request.post({
+  url: 'https://pastebin.com/api/api_login.php',
+  form: {
+    api_dev_key: apikey,
+    api_user_name: username,
+    api_user_password: password
+  }
+}, function (error, response, body) {
+  if (error) {
+    console.error('Invalid apikey, username, or password');
+    return;
+  }
 
-// getSortedCollection(function(array) {
-//   console.log("Collection sorted ",array)
-// })
+  const userkey = body;
+
+  // use the following to test your functions
+  getCollection(userkey, function(array){
+    console.log("Total items in collection ",array.length)
+      console.log("First item in collection ",array[0])
+  })
+
+  getSortedCollection(userkey, function(array) {
+    console.log("Collection sorted ",array)
+  })
+});
