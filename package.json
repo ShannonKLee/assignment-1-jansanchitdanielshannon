@@ -1,0 +1,25 @@
+{
+  "name": "assignment-1-jansanchitdanielshannon",
+  "version": "0.0.1",
+  "description": "",
+  "main": "main.js",
+  "dependencies": {
+    "request": "2.83.0"
+  },
+  "scripts": {},
+  "engines": {
+    "node": ">=6",
+    "npm": ">=3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/csc309-18s/assignment-1-jansanchitdanielshannon.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "",
+  "bugs": {
+    "url": "https://github.com/csc309-18s/assignment-1-jansanchitdanielshannon/issues"
+  },
+  "homepage": "https://github.com/csc309-18s/assignment-1-jansanchitdanielshannon#readme"
+}
