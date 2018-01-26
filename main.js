@@ -89,7 +89,7 @@ request.post({
   // use the following to test your functions
   getCollection(userkey, function(array){
     console.log("Total items in collection ",array.length)
-      console.log("First item in collection ",array[0])
+    console.log("First item in collection ",array[0])
   })
 
   getSortedCollection(userkey, function(array) {
