@@ -2,9 +2,7 @@
 const request = require('request');
 const xml2js = require('xml2js');
 
-let apikey = '';
-let username = '';
-let password = '';
+let user_args = {'sort': 'paste_date'};
 let cmd_args = process.argv.slice(2);
 
 while (cmd_args.length > 0) {
@@ -12,18 +10,15 @@ while (cmd_args.length > 0) {
 
   switch (cur_arg) {
     case '--apikey':
-      apikey = cmd_args.shift();
-      break;
     case '--username':
-      username = cmd_args.shift();
-      break;
     case '--password':
-      password = cmd_args.shift();
+    case '--sort':
+      user_args[cur_arg.substring(2)] = cmd_args.shift();
       break;
   }
 }
 
-if (!(apikey && username && password)) {
+if (!(user_args.apikey && user_args.username && user_args.password)) {
   console.error('Missing apikey, username, or password');
   process.exit(1);
 }
@@ -32,7 +27,7 @@ function getCollection(userkey, callback) {
   request.post({
     url: 'https://pastebin.com/api/api_post.php',
     form: {
-      api_dev_key: apikey,
+      api_dev_key: user_args.apikey,
       api_user_key: userkey,
       api_option: 'list'
     }
@@ -58,16 +53,30 @@ function getCollection(userkey, callback) {
 }
 
 function getSortedCollection(userkey, callback) {
-  // implement
-  getCollection(userkey, callback);
+  getCollection(userkey, function (array) {
+    if (!Array.isArray(array)) {
+      return;
+    }
+
+    array.sort(function (a, b) {
+      if (!(a && a[user_args.sort] &&
+            b && b[user_args.sort])) {
+        return 0;
+      }
+
+      return a[user_args.sort] > b[user_args.sort] ? 1 :
+              a[user_args.sort] < b[user_args.sort] ? -1 : 0;
+    });
+    callback(array);
+  });
 }
 
 request.post({
   url: 'https://pastebin.com/api/api_login.php',
   form: {
-    api_dev_key: apikey,
-    api_user_name: username,
-    api_user_password: password
+    api_dev_key: user_args.apikey,
+    api_user_name: user_args.username,
+    api_user_password: user_args.password
   }
 }, function (error, response, body) {
   if (error) {

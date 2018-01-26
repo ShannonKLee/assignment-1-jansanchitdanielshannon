@@ -13,7 +13,7 @@ Use [Pastebin API](https://pastebin.com/api) for file storage.
 ## Usage
 
 ```sh
-node main.js --apikey <apikey> --username <username> --password <password>
+node main.js --apikey <apikey> --username <username> --password <password> --sort <property>
 ```
 
 ## API
