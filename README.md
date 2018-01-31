@@ -2,13 +2,19 @@
 
 ## Team Members
 - Jan Edmund Lazo
-- Shannon Lee
+- Shannon Lee (100303637)
 - Sanchit Luthra
+- Sahil Gadhok
 
 ## Project Proposal
 
-File Hosting Website.
-Use [Pastebin API](https://pastebin.com/api) for file storage.
+[Pastebin API](https://pastebin.com/api)
+
+There are many available file sharing websites, including Google Drive, OneDrive, Airdrop, and Dropbox. However, we believe that these sites would benefit from including a social component, which is what our application aims to do. We will use the Pastebin API to aggregate the pastes, and our application will allow users to create groups, share pastes among group members, and comment on uploaded pastes. Comments will be associated to their corresponding paste only. This means that when a user deletes a paste, the comments will be deleted as well. If the user wants the comments to persist, they must change the expiration date of the paste in question. Users can also expect to be able to create new pastes within the application and add them to their group. 
+
+The Pastebin API provides detailed documentation on its various functionalities, such as how to create and retrieve pastes, all of which require the POST method. No other HTTP methods are supported. The output is in an XML format, but we will be using a third party library, xml2json, to convert it to a JSON object. 
+
+[Limitations?]
 
 ## Usage
 
